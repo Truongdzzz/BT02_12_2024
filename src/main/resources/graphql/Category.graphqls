@@ -1,0 +1,28 @@
+type Category {
+    id: ID!         # ID duy nhất của Category, không thể rỗng
+    name: String!    # Tên của Category, không thể rỗng
+    images: [String] # Danh sách URL hình ảnh
+    users: [User]!   # Liên kết nhiều-nhiều với User
+}
+
+
+# Root Query
+type Query {
+    # Truy vấn để lấy tất cả Categories
+    findAllCategories: [Category]!
+
+    # Truy vấn để tìm Category theo ID
+    findCategoryById(id: ID!): Category
+}
+
+# Root Mutation
+type Mutation {
+    # Mutation để tạo một Category mới
+    createCategory(name: String!, images: [String]): Category!
+
+    # Mutation để thêm User vào Category
+    addUserToCategory(categoryId: ID!, userId: ID!): Category!
+
+    # Mutation để xóa Category
+    deleteCategory(id: ID!): Boolean!
+}

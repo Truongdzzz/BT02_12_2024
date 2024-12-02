@@ -1,0 +1,31 @@
+# Định nghĩa Type cho User
+type User {
+    id: ID!         # ID duy nhất của User, không thể rỗng
+    fullname: String! # Tên đầy đủ của User, không thể rỗng
+    email: String!    # Email của User, không thể rỗng
+    password: String! # Mật khẩu của User, không thể rỗng
+    phone: String     # Số điện thoại của User, có thể rỗng
+}
+
+# Root Query
+extend type Query {
+    # Truy vấn để lấy tất cả Users
+    findAllUsers: [User]!
+
+    # Truy vấn để tìm User theo ID
+    findUserById(id: ID!): User
+    findCategoriesByUserId(userId: ID!): [Category]!
+}
+
+# Root Mutation
+extend type Mutation {
+    # Mutation để tạo một User mới
+    createUser(fullname: String!, email: String!, password: String!, phone: String): User!
+
+    # Mutation để cập nhật thông tin User
+    updateUser(id: ID!, fullname: String, email: String, password: String, phone: String): User!
+
+    # Mutation để xóa User theo ID
+    deleteUser(id: ID!): Boolean!
+}
+
