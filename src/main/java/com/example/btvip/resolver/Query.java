@@ -7,14 +7,17 @@ import com.example.btvip.repository.CategoryRepository;
 import com.example.btvip.repository.UserRepository;
 import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLScalarType;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Controller
 public class Query implements GraphQLQueryResolver {
     private CategoryRepository categoryRepository;
     private UserRepository userRepository;
@@ -39,7 +42,15 @@ public class Query implements GraphQLQueryResolver {
         }
         return userRepository.findAll();
     }
-    public List<Category> findCategoriesByUserId(Long userId) {
+    @QueryMapping
+    public List<Category> getCategoriesByUser(@Argument Long userId) throws EntityNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        return user.getCategories();
+    }
+    @QueryMapping
+    public List<Category> findCategoriesByUserId(@Argument Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

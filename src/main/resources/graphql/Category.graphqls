@@ -1,7 +1,7 @@
 type Category {
     id: ID!         # ID duy nhất của Category, không thể rỗng
     name: String!    # Tên của Category, không thể rỗng
-    images: [String] # Danh sách URL hình ảnh
+    images: String # Danh sách URL hình ảnh
     users: [User]!   # Liên kết nhiều-nhiều với User
 }
 
@@ -18,7 +18,7 @@ type Query {
 # Root Mutation
 type Mutation {
     # Mutation để tạo một Category mới
-    createCategory(name: String!, images: [String]): Category!
+    createCategory(name: String!, images: String): Category!
 
     # Mutation để thêm User vào Category
     addUserToCategory(categoryId: ID!, userId: ID!): Category!

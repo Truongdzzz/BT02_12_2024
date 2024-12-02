@@ -7,18 +7,18 @@ import com.example.btvip.repository.CategoryRepository;
 import com.example.btvip.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.Arguments;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-@Component
+@Controller
 public class Mutation implements GraphQLMutationResolver {
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
     public Mutation(UserRepository userRepository, CategoryRepository categoryRepository) {
@@ -27,11 +27,10 @@ public class Mutation implements GraphQLMutationResolver {
     }
     // Mutation để tạo User mới
     @MutationMapping
-    public User createUser(@Arguments String fullname, @Arguments String email, @Arguments String password, @Arguments String phone) {
+    public User createUser(@Argument String fullname, @Argument String email, @Argument  String password, @Argument  String phone) {
         if (fullname == null || email == null || password == null) {
             throw new IllegalArgumentException("Fullname, email, and password must not be null.");
         }
-
         try {
             User user = new User();
             user.setFullname(fullname);
@@ -39,6 +38,7 @@ public class Mutation implements GraphQLMutationResolver {
             user.setPassword(password);
             user.setPhone(phone);
             // Lưu vào cơ sở dữ liệu
+            System.out.print(fullname.toString());
             userRepository.save(user);
             return user;
         } catch (Exception e) {
@@ -47,8 +47,8 @@ public class Mutation implements GraphQLMutationResolver {
     }
 
     // Mutation để cập nhật thông tin User
-    @QueryMapping
-    public User updateUser(Long id, String fullname, String email, String password, String phone) throws EntityNotFoundException {
+    @MutationMapping
+    public User updateUser(@Argument Long id,@Argument String fullname,@Argument String email,@Argument String password,@Argument String phone) throws EntityNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -62,8 +62,8 @@ public class Mutation implements GraphQLMutationResolver {
     }
 
     // Mutation để xóa User theo ID
-    @QueryMapping
-    public boolean deleteUser(Long id) {
+    @MutationMapping
+    public boolean deleteUser(@Argument Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
             return true;
@@ -72,19 +72,19 @@ public class Mutation implements GraphQLMutationResolver {
     }
 
     // Mutation để tạo Category mới
-    @QueryMapping
-    public Category createCategory(String name, String images) {
+    @MutationMapping
+    public Category createCategory(@Argument String name,@Argument String images) {
         Category category = new Category();
         category.setName(name);
         category.setImages(images);
-
+        System.out.println(name);
         categoryRepository.save(category);
         return category;
     }
 
     // Mutation để thêm User vào Category
-    @QueryMapping
-    public Category addUserToCategory(String categoryId, Long userId) throws EntityNotFoundException {
+    @MutationMapping
+    public Category addUserToCategory(@Argument Long categoryId,@Argument Long userId) throws EntityNotFoundException {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
@@ -100,8 +100,8 @@ public class Mutation implements GraphQLMutationResolver {
     }
 
     // Mutation để xóa Category
-    @QueryMapping
-    public boolean deleteCategory(String id) {
+    @MutationMapping
+    public boolean deleteCategory(@Argument Long id) {
         if (categoryRepository.existsById(id)) {
             categoryRepository.deleteById(id);
             return true;

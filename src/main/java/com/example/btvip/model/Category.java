@@ -8,15 +8,16 @@ import java.util.List;
 @Entity
 public class Category implements Serializable {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Tự động tăng ID
+    private Long id;
     private String name;
     private String images ;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -15,6 +15,7 @@ extend type Query {
     # Truy vấn để tìm User theo ID
     findUserById(id: ID!): User
     findCategoriesByUserId(userId: ID!): [Category]!
+    getCategoriesByUser(userId: Int!): [Category]
 }
 
 # Root Mutation
