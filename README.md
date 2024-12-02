@@ -1,4 +1,4 @@
-#get all user
+# get all user
 query{
   findAllUsers {
     id,
@@ -6,7 +6,7 @@ query{
     email
   }
 }
-#get all category
+# get all category
 query{
   findAllCategories{
     id,
@@ -14,7 +14,7 @@ query{
     images
   }
 }
-#get all category by userId
+# get all category by userId
 query{
 getCategoriesByUser(
 	userId: 1
@@ -45,7 +45,7 @@ mutation{
     id
   }
 }
-#read user
+# read user
 query{
   findAllCategories{
     id,
